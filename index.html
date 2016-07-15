@@ -1,97 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 	<title>KJVBot</title>
-		<style>
-		body {
-			background-color: #CFD8DC;
-		}
-		h1 {
-			font: 30px "Baskerville Old Face", serif;
-			color: #212121;
-			text-align: justify;
-			margin: 5%;
-		}
-		h2 {
-			font: 10px "Baskerville Old Face", serif;
-			color: #212121;
-			text-align: center;
-			margin: 5%;
-		}
-		#outerwrapper {
-				width: 100%;
-				text-align: center;	
-		}
-		#innerwrapper {
-				max-width: 600px;
-				display: inline-block;
-				width: 50%;
-				left: 50%;					
-		}
-		.button {
-    			background-color: #D32F2F;
-    			border-radius: 3px;
-    			color: #FFFFFF;
-    			padding: 12px;
-    			font: 30px "Baskerville Old Face", serif;
-    			text-align: center;
-    			text-decoration: none;
-    			display: inline-block;
-    			margin: 1% 1%;
-    			width: 37%;
-    			cursor: pointer;
-		}
-		#banner {
-                background-color: #D32F2F;
-                border-radius: 3px;
-                font: 30px "Baskerville Old Face", serif;
-                text-align: center;
-                color: #FFFFFF;
-                padding: 12px;
-                margin: 1% 4%;
-                width: 84%;
-            }
-		</style>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	</head>
-	<body onload="change_width()">
-		<div id="outerwrapper">
-		<div id="innerwrapper">
-		<p><div id="banner">thus sayeth kjvbot:</div></p>
-		<h1>
-		<p><div id="verse">{{ verse }}</div></p>
-		</h1>		
-		<div class="button" onclick="get_new_verse()">rerun</div>
-  		<a id="twitter_post" href="https://twitter.com/intent/tweet?screen_name=kjvbot&text={{ verse }}" class="button">tweet</a></b>
-  		<h2>
-  		<p><br/>more at <a href="http://apps.iliff.edu/nlp/about">NLP Working Group</a> and <a href="https://timothy-beal.squarespace.com/#/kjvbot/">Timothy Beal</a></p>
-  		</h2>
-  		</div>
-		</div>
-  		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-    <script>
-     	function get_new_verse() {
-          	$.ajax({
-            	url: "new_verse",
-            	type: "GET",
+
+	<body>
+		<main>
+			<div class="jumbotron" id="banner" style="margin-bottom:8%; background-color:firebrick">
+				<h1 class="text-center" style="color:white">thus sayeth kjvbot:</h1>
+			</div>
+			<div class="container" style="margin-bottom:8%">
+				<div class="row">
+					<div class="col-xs-6 col-sm-offset-3">
+						<h3 id="verse">{{ verse }}</h3>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-3 col-sm-offset-3" style="margin-bottom:1rem">
+						<button type="button" class="btn btn-default btn-block" onclick="get_new_verse()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> New Verse</button>
+					</div>
+					<div class="col-sm-3" style="margin-bottom:3rem">
+						<a id="twitter_post" href="https://twitter.com/intent/tweet?screen_name=kjvbot&text={{ verse }}" class="btn btn-primary btn-block" role="button">Tweet This</a>
+					</div>
+				</div>
+			</div>
+			<footer class="footer">
+				<div class="container">
+					<p class="text-muted text-center">More at <a href="http://apps.iliff.edu/nlp/about">NLP Working Group</a> and <a href="https://timothy-beal.squarespace.com/#/kjvbot/">Timothy Beal</a></p>
+				</div>
+			</footer>
+		</main>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    	<script>
+     		function get_new_verse() {
+          $.ajax({
+            url: "new_verse",
+            type: "GET",
           		success: function(json) {
             		document.getElementById("verse").innerHTML = json.verse;
             		document.getElementById("twitter_post").href = "https://twitter.com/intent/tweet?screen_name=kjvbot&text=" + json.verse;
           		}
           	})
-     	};
-     	function change_width() {
-     		var width = window.innerWidth;
-     		var innerwrapper = document.getElementById("innerwrapper");
-     		if (width < 700) {
-     			innerwrapper.style.width = "90%";
-     		}
-     		else {
-     			innerwrapper.style.width = "50%";
-     		}
-     	}
-     	window.onresize = change_width();
-    	</script>
-	</body>	
+     			};
+			</script>
+	</body>
 </html>
-
